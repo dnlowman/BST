@@ -5,8 +5,18 @@ export default class Tree {
         this.rootNode = null
     }
 
-    search() {
-
+    search(key, callback, node) {
+        node = node || this.rootNode
+        if(node.key === key) {
+            callback(true)
+            return
+        }
+        if(key < node.key && node.leftNode !== null)
+            this.search(key, callback, node.leftNode)
+        else if(key >= node.key && node.rightNode !== null)
+            this.search(key, callback, node.rightNode)
+        else
+            return
     }
 
     insert(node, key, value) {

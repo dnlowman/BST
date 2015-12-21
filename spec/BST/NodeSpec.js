@@ -115,6 +115,39 @@ describe("A Binary Search Tree", function() {
                 expect(tree.rootNode).toBe(null)
             })
         })
+
+        describe("the search method", function() {
+            it("finds child", function() {
+                // Given
+                var tree = new Tree()
+                tree.insert(null, 1, null)
+                tree.insert(null, 0, null)
+
+                // When
+                var result = tree.search(0, (found) => {
+
+                    // Then...
+                    expect(found).toBe(true)
+                })
+            })
+
+            it("finds nested child", function() {
+                // Given
+                var tree = new Tree()
+                tree.insert(null, 1, null)
+                tree.insert(null, 0, null)
+                tree.insert(null, 3, null)
+                tree.insert(null, 2, null)
+                tree.insert(null, 4, null)
+
+                // When
+                var result = tree.search(4, (found) => {
+
+                    // Then...
+                    expect(found).toBe(true)
+                })
+            })
+        })
     })
 
     describe("A Node", function() {
