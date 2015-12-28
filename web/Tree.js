@@ -12,9 +12,9 @@ export default class Tree {
             callback(true)
             return
         }
-        if(key < node.key && node.leftNode !== null)
+        if(key <= node.key && node.leftNode !== null)
             this.search(key, callback, node.leftNode)
-        else if(key >= node.key && node.rightNode !== null)
+        else if(key > node.key && node.rightNode !== null)
             this.search(key, callback, node.rightNode)
         else
             return
@@ -23,8 +23,8 @@ export default class Tree {
     insert(node, key, value) {
         if(this.rootNode === null)
             return this.rootNode = new Node(null, null, key, value)
-        var node = (node === null ) ? this.rootNode : node
-        if(key < node.key) {
+        node = (node === null ) ? this.rootNode : node
+        if(key <= node.key) {
             if(node.leftNode === null)
                 node.leftNode = new Node(null, null, key, value)
             else
@@ -110,6 +110,43 @@ export default class Tree {
             findMin(node.leftNode, node)
         else
             return { node: node, parent: parent }
+    }
+
+
+    renderTree() {
+        if(this.rootNode === null || this.canvasContext === null) return
+        let xPos = window.innerWidth / 2
+        let yPos = 30
+        let radius = 25
+
+        this.renderTreeRecursive(xPos, yPos, radius, this.rootNode, null)
+    }
+
+    renderTreeRecursive(xPos, yPos, radius, currentNode, parentNode) {
+        this.canvasContext.beginPath()
+        this.canvasContext.arc(xPos, yPos, radius, 0, Math.PI*2, true)
+        this.canvasContext.stroke()
+        this.canvasContext.font = "12px serif";
+        this.canvasContext.fillText("Key: " + currentNode.key, xPos - 15, yPos + 4);
+
+        if(currentNode.leftNode !== null) {
+            this.canvasContext.beginPath()
+            this.canvasContext.moveTo(xPos, yPos);
+            this.canvasContext.lineTo(xPos - 60, yPos + 60);
+            this.canvasContext.stroke();
+            this.renderTreeRecursive(xPos - 60, yPos + 60, radius, currentNode.leftNode, currentNode)
+        }
+        if(currentNode.rightNode !== null) {
+            this.canvasContext.beginPath()
+            this.canvasContext.moveTo(xPos, yPos);
+            this.canvasContext.lineTo(xPos + 60, yPos + 60);
+            this.canvasContext.stroke();
+            this.renderTreeRecursive(xPos + 60, yPos + 60, radius, currentNode.rightNode, currentNode)
+        }
+    }
+
+    eraseRenderedTree() {
+        this.canvasContext.clearRect(0, 0, this.canvasContext.canvas.width, this.canvasContext.canvas.height);
     }
 
     traverse() {
